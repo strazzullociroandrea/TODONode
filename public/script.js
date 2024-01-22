@@ -3,7 +3,7 @@ const titoloTODO = document.getElementById("titoloInput");
 const aggiungiTODO = document.getElementById("aggiungiButton");
 const tbodyTODO = document.getElementById("contenutoTableTodo");
 //variabili e template
-const todos = [];
+let todos = [];
 const todoTemplate = (title) => {
   return {
     title: title,
@@ -40,7 +40,6 @@ const render = (
   templateBTNConferma,
   container,
 ) => {
-  console.log(array);
   let html = "";
   let count = 0;
   array.forEach((element) => {
@@ -93,6 +92,17 @@ const render = (
   });
 };
 
+const salva = (body) => {
+  return new Promise((resolve, reject) => {
+    fetch("/salvaTodo", {
+      method: "POST",
+      headers: {
+        "Content-type": "Application/json",
+      },
+      body: JSON.stringify(body),
+    }).then((response) => resolve("ok"));
+  });
+};
 /** 
 gestione click button aggiungiTODO presente nella card
 */
@@ -101,6 +111,11 @@ aggiungiTODO.onclick = () => {
     if (titoloTODO.classList.contains("border-danger")) {
       titoloTODO.classList.remove("border-danger");
     }
+
+    salva(todoTemplate(titoloTODO.value)).then((response) =>
+      console.log(response),
+    );
+
     todos.push(todoTemplate(titoloTODO.value));
     titoloTODO.value = "";
     render(
@@ -113,4 +128,27 @@ aggiungiTODO.onclick = () => {
   } else {
     titoloTODO.classList.add("border-danger");
   }
+};
+
+window.onload = () => {
+  fetch("/recuperaTodo", {
+    method: "GET",
+    headers: {
+      "content-type": "application/json",
+    },
+  })
+    .then((response) => response.json())
+    .then((response) => {
+      if (response.todo) {
+        response = response.todo;
+        todos = response;
+        render(
+          todos,
+          tbodyTodoTemplate,
+          templateBTNElimina,
+          templateBTNConferma,
+          tbodyTODO,
+        );
+      }
+    });
 };
