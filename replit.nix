@@ -1,6 +1,0 @@
-{pkgs}: {
-  deps = [ ];
-  
-}
- #ciao
- #riprovo
