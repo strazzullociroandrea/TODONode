@@ -152,3 +152,26 @@ window.onload = () => {
       }
     });
 };
+
+setInterval(() => {
+  fetch("/recuperaTodo", {
+    method: "GET",
+    headers: {
+      "content-type": "application/json",
+    },
+  })
+    .then((response) => response.json())
+    .then((response) => {
+      if (response.todo) {
+        response = response.todo;
+        todos = response;
+        render(
+          todos,
+          tbodyTodoTemplate,
+          templateBTNElimina,
+          templateBTNConferma,
+          tbodyTODO,
+        );
+      }
+    });
+}, 5000);
