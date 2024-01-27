@@ -1,4 +1,4 @@
-
+import {recupera, elimina} from "/fetch.js";
 const templateBTNElimina = `
   <button class="btn btn-danger" id="ELIMINA_%ID">
   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
@@ -27,9 +27,10 @@ export const render = (
     array,
     container
 ) => {
+    console.log(array);
     let html = "";
     let count = 0;
-    if (array != undefined && array.length > 0) {
+    if (array != undefined) {
         array.forEach((element) => {
             let row = tbodyTodoTemplate;
             row = row
@@ -53,18 +54,17 @@ export const render = (
                 }
             }
         });
-        //gestione button elimina
         document.querySelectorAll(".btn-danger").forEach(button => {
             button.onclick = () => {
-                const idTodo = array[button.id.split("_")[1]].id;
-                console.log("id todo da cancellare: " + idTodo);
-                cancella(idTodo)
+                const index = button.id.split("_")[1];
+                elimina(array[index].id)
                 .then(response => {
-                        recupera()
-                        .then(response => render(response,container));
-                });
+                    recupera().then(response => {
+                        render(response, container)
+                    });
+                })
             }
-        });        
+        });       
     }
 
 }

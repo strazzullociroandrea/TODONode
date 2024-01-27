@@ -27,7 +27,17 @@ app.get("/recuperaTodo", (request, response) => {
   response.json({ todo: todos });
 });
 
-
+//Servizio per eliminare i todo su server
+app.delete("/eliminaTodo/:id",(request, response)=>{
+ 
+  for(let i=0;i<todos.length;i++){
+    const todo = todos[i];
+    if(todo.id == request.params.id){
+      todos.splice(i,1);
+    }
+  }
+  response.json({result: "Ok"});
+});
 
 const server = http.createServer(app);
 server.listen(80, () => {
