@@ -29,15 +29,27 @@ app.get("/recuperaTodo", (request, response) => {
 
 //Servizio per eliminare i todo su server
 app.delete("/eliminaTodo/:id",(request, response)=>{
- 
-  for(let i=0;i<todos.length;i++){
-    const todo = todos[i];
-    if(todo.id == request.params.id){
-      todos.splice(i,1);
-    }
+  const index = todos.findIndex(todo => todo.id == request.params.id);
+  if(index != -1){
+    todos.splice(index,1);
+    response.json({result: "Ok"});
+  }else{
+    response.json({result: "Non presente"});
   }
-  response.json({result: "Ok"});
 });
+
+//Servizio per aggiornare la todo su server
+app.put("/completa",(request, response)=>{
+  const todo = request.body;
+  const index = todos.findIndex(todoa => todoa.id == todo.id);
+  if(index != -1){
+    todos[index]['completed'] = true;
+    response.json({result: "ok"});
+  }else{
+    response.json({result: "Non presente"});
+  }
+})
+
 
 const server = http.createServer(app);
 server.listen(80, () => {

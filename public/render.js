@@ -1,4 +1,4 @@
-import {recupera, elimina} from "/fetch.js";
+import { recupera, elimina, completa } from "/fetch.js";
 const templateBTNElimina = `
   <button class="btn btn-danger" id="ELIMINA_%ID">
   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
@@ -27,7 +27,6 @@ export const render = (
     array,
     container
 ) => {
-    console.log(array);
     let html = "";
     let count = 0;
     if (array != undefined) {
@@ -51,6 +50,12 @@ export const render = (
         document.querySelectorAll(".btn-success").forEach(button => {
             if (button.id != "aggiungiButton") {
                 button.onclick = () => {
+                    const index = button.id.split("_")[1];
+                    completa(array[index]).then(response=> {
+                        recupera().then(response => {
+                            render(response, container)
+                        });
+                    });
                 }
             }
         });
@@ -58,13 +63,13 @@ export const render = (
             button.onclick = () => {
                 const index = button.id.split("_")[1];
                 elimina(array[index].id)
-                .then(response => {
-                    recupera().then(response => {
-                        render(response, container)
-                    });
-                })
+                    .then(response => {
+                        recupera().then(response => {
+                            render(response, container)
+                        });
+                    })
             }
-        });       
+        });
     }
 
 }

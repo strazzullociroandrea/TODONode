@@ -60,6 +60,24 @@ export const elimina = (id) => {
       .then((response) => response.json())
       .then((json) => {
         resolve(json);
-      }).catch(error=> reject(error));
+      }).catch(error => reject(error));
+  })
+}
+
+/**
+ * Funzione per rendere una todo completata
+ * @returns response
+ */
+export const completa = (todo) => {
+  return new Promise((resolve, reject) => {
+    fetch("/completa", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(todo)
+    })
+      .then((response) => response.json())
+      .then(response => resolve(response));
   })
 }
