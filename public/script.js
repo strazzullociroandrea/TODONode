@@ -1,3 +1,5 @@
+import {salva} from "/fetch.js";
+
 //DOM
 const titoloTODO = document.getElementById("titoloInput");
 const aggiungiTODO = document.getElementById("aggiungiButton");
@@ -92,17 +94,7 @@ const render = (
   });
 };
 
-const salva = (body) => {
-  return new Promise((resolve, reject) => {
-    fetch("/salvaTodo", {
-      method: "POST",
-      headers: {
-        "Content-type": "Application/json",
-      },
-      body: JSON.stringify(body),
-    }).then((response) => resolve("ok"));
-  });
-};
+
 /** 
 gestione click button aggiungiTODO presente nella card
 */
